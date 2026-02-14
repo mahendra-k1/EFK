@@ -5,13 +5,11 @@ metadata:
   namespace: efklog
   labels:
     k8s-app: elasticsearch-logging
-    kubernetes.io/cluster-service: "true"
-    addonmanager.kubernetes.io/mode: Reconcile
-    kubernetes.io/name: "Elasticsearch"
 spec:
   ports:
-  - port: 9200
+  - name: http
+    port: 9200
     protocol: TCP
-    targetPort: db
+    targetPort: http
   selector:
     k8s-app: elasticsearch-logging
