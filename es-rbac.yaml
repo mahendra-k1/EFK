@@ -1,4 +1,3 @@
-# RBAC authn and authz
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -6,39 +5,31 @@ metadata:
   namespace: efklog
   labels:
     k8s-app: elasticsearch-logging
-    addonmanager.kubernetes.io/mode: Reconcile
 ---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: elasticsearch-logging
-  labels:
-    k8s-app: elasticsearch-logging
-    addonmanager.kubernetes.io/mode: Reconcile
 rules:
-- apiGroups:
-  - ""
+- apiGroups: [""]
   resources:
-  - "services"
-  - "namespaces"
-  - "endpoints"
+  - services
+  - namespaces
+  - endpoints
   verbs:
-  - "get"
+  - get
+  - list
+  - watch
 ---
-kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
 metadata:
-  namespace: efklog
   name: elasticsearch-logging
-  labels:
-    k8s-app: elasticsearch-logging
-    addonmanager.kubernetes.io/mode: Reconcile
 subjects:
 - kind: ServiceAccount
   name: elasticsearch-logging
   namespace: efklog
-  apiGroup: ""
 roleRef:
   kind: ClusterRole
   name: elasticsearch-logging
-  apiGroup: ""
+  apiGroup: rbac.authorization.k8s.io
